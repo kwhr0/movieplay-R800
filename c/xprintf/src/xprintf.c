@@ -312,7 +312,9 @@ static void xvfprintf (
 			xfputc(func, (char)va_arg(arp, int)); continue;
 		case 's':					/* String */
 			p = va_arg(arp, char*);		/* Get a pointer argument */
+#ifndef __SDCC
 			if (!p) p = "";				/* Null ptr generates a null string */
+#endif
 			j = strlen(p);
 			if (prec >= 0 && j > (unsigned int)prec) j = prec;	/* Limited length of string body */
 			for ( ; !(f & 2) && j < w; j++) xfputc(func, pad);	/* Left pads */

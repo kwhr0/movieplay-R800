@@ -391,7 +391,7 @@ static int16 getExtendOffset(uint8 i)
       case 15: return ((-1)<<15) + 1;
       default: return 0;
    }
-};
+}
 //------------------------------------------------------------------------------
 static PJPG_INLINE int16 huffExtend(uint16 x, uint8 s)
 {
@@ -1247,6 +1247,12 @@ static void createWinogradQuant(int16* pQuant)
 // A smart C compiler will optimize them to use 16x8 = 24 bit muls, if not you may need to tweak
 // these functions or drop to CPU specific inline assembly.
 
+#ifdef __SDCC
+int16 imul_b1_b3(int16 w);
+int16 imul_b2(int16 w);
+int16 imul_b4(int16 w);
+int16 imul_b5(int16 w);
+#else
 // 1/cos(4*pi/16)
 // 362, 256+106
 static PJPG_INLINE int16 imul_b1_b3(int16 w)
@@ -1282,6 +1288,7 @@ static PJPG_INLINE int16 imul_b5(int16 w)
    x += 128L;
    return (int16)(PJPG_ARITH_SHIFT_RIGHT_8_L(x));
 }
+#endif
 
 static PJPG_INLINE uint8 clamp(int16 s)
 {
@@ -1730,10 +1737,12 @@ static void convertCb(uint8 dstOfs)
       int16 cbG, cbB;
 
       cbG = ((cb * 88U) >> 8U) - 44U;
-      *pDstG++ = subAndClamp(pDstG[0], cbG);
+      *pDstG = subAndClamp(*pDstG, cbG);
+	  ++pDstG;
 
       cbB = (cb + ((cb * 198U) >> 8U)) - 227U;
-      *pDstB++ = addAndClamp(pDstB[0], cbB);
+      *pDstB = addAndClamp(*pDstB, cbB);
+	  ++pDstB;
    }
 }
 /*----------------------------------------------------------------------------*/
@@ -1751,10 +1760,12 @@ static void convertCr(uint8 dstOfs)
       int16 crR, crG;
 
       crR = (cr + ((cr * 103U) >> 8U)) - 179;
-      *pDstR++ = addAndClamp(pDstR[0], crR);
+      *pDstR = addAndClamp(*pDstR, crR);
+	  ++pDstR;
 
       crG = ((cr * 183U) >> 8U) - 91;
-      *pDstG++ = subAndClamp(pDstG[0], crG);
+      *pDstG = subAndClamp(*pDstG, crG);
+	  ++pDstG;
    }
 }
 /*----------------------------------------------------------------------------*/
