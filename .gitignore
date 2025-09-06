@@ -1,0 +1,11 @@
+*.adr
+*.asm
+*.bin
+*.ihx
+*.lst
+*.map
+*.noi
+*.rel
+*.sym
+Depend
+emu800

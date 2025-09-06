@@ -1,0 +1,15 @@
+-mjwx
+-i a.ihx
+-b _CODE = 0x68
+-b _HEAP_END = 0xf000
+-k /usr/local/share/sdcc/lib/r800
+-l r800
+crt0.rel
+main.rel
+xprintf.rel
+ff.rel
+diskio.rel
+picojpeg.rel
+jpegdec.rel
+sjpeg.rel
+-e
