@@ -1,6 +1,6 @@
 #! /usr/bin/perl
 
-@VPATH = (".", "ff14b/source", "xprintf/src", "picojpeg");
+@VPATH = (".", "ff16/source", "xprintf/src", "picojpeg");
 
 @ARGV || die "Usage: mkadr.pl <sym files>\n";
 
